@@ -523,8 +523,18 @@ wire  [`PITON_NUM_TILES-1:0]   ipi;         // software interrupt (a.k.a inter-p
 `endif // ifdef PITON_RV64_CLINT
 
 `ifdef PITON_RV64_PLIC
-// PLIC
-wire  [`PITON_NUM_TILES*2-1:0] irq;         // level sensitive IR lines, mip & sip (async)
+    `ifndef USE_APLIC
+      // PLIC
+      wire  [`PITON_NUM_TILES*2-1:0] irq;         // level sensitive IR lines, mip & sip (async)
+    `else
+      // APLIC
+      `ifdef DIRECT_MODE
+       /** Interrupt Notification to Targets. One per priv. level. */
+        wire [(`NR_IDCs*2)-1:0]     Xeip_targets;
+      `else
+        wire [`NR_INTP_FILES-1:0]   Xeip_targets;
+      `endif // ifdef DIRECT_MODE
+    `endif // USE_APLIC
 `endif // ifdef PITON_RV64_PLIC
 `endif // ifdef PITON_RV64_PLATFORM
 
@@ -1232,8 +1242,11 @@ chipset chipset(
 `endif // ifdef PITON_RV64_CLINT
 
 `ifdef PITON_RV64_PLIC
-    // PLIC
+  `ifndef USE_APLIC
     ,.irq_o                         ( irq                        ) // level sensitive IR lines, mip & sip (async)
+  `else
+    ,.Xeip_targets_o                ( Xeip_targets              )
+  `endif   // ifdef USE_APLIC
 `endif // ifdef PITON_RV64_PLIC
 `endif // ifdef PITON_RV64_PLATFORM
 

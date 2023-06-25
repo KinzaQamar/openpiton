@@ -577,6 +577,14 @@ print("`define PITON_Y_TILES %d"   % PITON_Y_TILES)
 `define PICORV32_TILE    1
 `define ARIANE_RV64_TILE 2
 
+`ifdef DIRECT_MODE
+`define NR_IDCs          `PITON_NUM_TILES
+`else
+`define NR_IDCs          0
+`endif
+
+`define NR_INTP_FILES    2
+
 `endif
 
 
