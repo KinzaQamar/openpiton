@@ -584,6 +584,7 @@ print("`define PITON_Y_TILES %d"   % PITON_Y_TILES)
 `endif
 
 `define NR_INTP_FILES    2
+`define NR_DOMAINS       2
 
 `endif
 
